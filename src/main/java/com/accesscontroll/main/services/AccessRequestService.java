@@ -1,7 +1,6 @@
 package com.accesscontroll.main.services;
 
 import com.accesscontroll.main.DTO.AccessRequestDTO;
-import com.accesscontroll.main.DTO.RoleDTO;
 import com.accesscontroll.main.entities.AccessRequest;
 import com.accesscontroll.main.entities.ProtectedResource;
 import com.accesscontroll.main.entities.UserResourceAccess;
@@ -18,7 +17,6 @@ import java.util.List;
 public class AccessRequestService {
 
     private final AccessRequestRepository repository;
-    private final KeycloakAdminService keycloakAdminService;
     private final UserResourceAccessRepository resourceAccessRepository;
     private final ProtectedResourceRepository protectedResourceRepository;
 

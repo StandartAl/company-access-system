@@ -1,12 +1,10 @@
 package com.accesscontroll.main.services;
 
 import com.accesscontroll.main.DTO.RoleDTO;
-import com.accesscontroll.main.repositories.AccessRequestRepository;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -110,40 +108,6 @@ public class KeycloakAdminService {
                 .header("Authorization", "Bearer " + token)
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(List.of(roleToAssign))
-                .retrieve()
-                .toBodilessEntity()
-                .block();
-    }
-
-    public void removeRealmRole(String username, String roleName) {
-        String token = getAccessToken();
-        Optional<String> userIdOpt = getUserIdByUsername(username);
-
-        if (userIdOpt.isEmpty()) {
-            return;
-        }
-
-        String userId = userIdOpt.get();
-
-        // Получаем объект роли
-        WebClient webClient = WebClient.create();
-        Map<String, Object> roleRepresentation = webClient.get()
-                .uri(serverUrl + "/admin/realms/" + realm + "/roles/" + roleName)
-                .header("Authorization", "Bearer " + token)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
-
-        if (roleRepresentation == null) {
-            return;
-        }
-
-        // Удаляем роль у пользователя
-        webClient.method(org.springframework.http.HttpMethod.DELETE)
-                .uri(serverUrl + "/admin/realms/" + realm + "/users/" + userId + "/role-mappings/realm")
-                .header("Authorization", "Bearer " + token)
-                .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(List.of(roleRepresentation))
                 .retrieve()
                 .toBodilessEntity()
                 .block();
